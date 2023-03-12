@@ -75,6 +75,43 @@ class TicTacToe
     end
 
     def won?
-        WIN_COMBINATIONS.include?
+        # Check each win combination
+        WIN_COMBINATIONS.each do |combination|
+          # Check if the positions in the combination are taken and have the same value on the board
+          if position_taken?(combination[0]) && @board[combination[0]] == @board[combination[1]] && @board[combination[1]] == @board[combination[2]]
+            # Return the winning combination
+            return combination
+          end
+        end
+        # Return false if no winning combination is found
+        false
+      end
+
+      def full?
+        @board.all? { |position| position == "X" || position == "O" }
+      end
+
+      def draw?
+        full? && !won?
+      end
+      
+      def over?
+        draw? || won?
+      end
+      
+      def winner
+        if combination = won?
+          @board[combination[0]]
+        end
     end
+
+    def play
+        while !over?
+          display_board
+          move = get_move
+          update_board(move)
+          switch_players
+        end
+    end
+    
 end
